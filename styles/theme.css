@@ -1,0 +1,59 @@
+:root {
+  /* Base colors with zinc-900 dark theme */
+  --background: #18181b; /* zinc-900 */
+  --foreground: #ffffff;
+  --card-background: #27272a; /* zinc-800 */
+  --card-hover: #3f3f46; /* zinc-700 */
+  --card-border: #3f3f46; /* zinc-700 */
+  --primary: #3b82f6; /* blue-500 */
+  --primary-foreground: #ffffff;
+  --secondary: #a1a1aa; /* zinc-400 */
+  --secondary-foreground: #ffffff;
+  --accent: #3b82f6; /* same as primary */
+  --accent-foreground: #ffffff;
+  --muted: #71717a; /* zinc-500 */
+  --muted-foreground: #ffffff;
+  --subtle-border: #3f3f46; /* zinc-700 */
+  --subtle-background: #27272a; /* zinc-800 */
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa; /* zinc-400 */
+}
+
+/* Dark theme */
+.dark {
+  --background: #18181b; /* zinc-900 */
+  --foreground: #ffffff;
+  --card-background: #27272a; /* zinc-800 */
+  --card-hover: #3f3f46; /* zinc-700 */
+  --card-border: #3f3f46; /* zinc-700 */
+}
+
+/* Card effects - simplified */
+.card-effect {
+  background: var(--card-background);
+  border: 1px solid var(--card-border);
+  border-radius: 0.75rem;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-effect:hover {
+  background: var(--card-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Simple button hover effect - no glow */
+.btn-hover {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Simple gradient text */
+.gradient-text {
+  color: var(--primary);
+} 

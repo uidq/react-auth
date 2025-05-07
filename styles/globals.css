@@ -1,0 +1,28 @@
+@import './theme.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[var(--background)] text-[var(--foreground)];
+  }
+}
+
+@layer components {
+  .border-card {
+    position: relative;
+    border-radius: 0.75rem;
+    border: 1px solid var(--card-border);
+    background-color: var(--card-background);
+    overflow: hidden;
+  }
+  
+  .glass-effect {
+    background: rgba(39, 39, 42, 0.7); /* zinc-800 with opacity */
+    backdrop-filter: blur(12px);
+    border-radius: 0.75rem;
+    border: 1px solid var(--subtle-border);
+  }
+}
