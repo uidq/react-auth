@@ -189,7 +189,8 @@ export default function SubscriptionsPage() {
   const [cardCVC, setCardCVC] = useState('')
   const [nameOnCard, setNameOnCard] = useState('')
   const [message, setMessage] = useState({ type: '', text: '' })
-  const [selectedGame, setSelectedGame] = useState<string | null>(null)
+  const [currentGame, setCurrentGame] = useState<string | null>(null)
+  const [displayedGame, setDisplayedGame] = useState<string | null>(null)
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -208,14 +209,14 @@ export default function SubscriptionsPage() {
         if (visibleSubscription) {
           setCurrentPlan(visibleSubscription.plan_id);
           setCurrentDuration(visibleSubscription.duration as SubscriptionDuration || 'month');
-          setSelectedGame(visibleSubscription.game);
+          setCurrentGame(visibleSubscription.game);
           setSubscriptionStatus(visibleSubscription.status);
         } else {
           // Get the user's subscription data from metadata as fallback
           if (user.user_metadata?.subscription_plan) {
             setCurrentPlan(user.user_metadata.subscription_plan);
             setCurrentDuration(user.user_metadata.subscription_duration || 'month');
-            setSelectedGame(user.user_metadata.subscription_game);
+            setCurrentGame(user.user_metadata.subscription_game);
             setSubscriptionStatus(user.user_metadata.subscription_status || 'active');
           }
         }
@@ -306,39 +307,29 @@ export default function SubscriptionsPage() {
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault()
     
+    if (!user || !selectedPlan) return
+    
+    setPaymentProcessing(true)
+    
     try {
-      setPaymentProcessing(true)
-      setMessage({ type: '', text: '' })
-      
-      // Validate form
-      if (!cardNumber || !cardExpiry || !cardCVC || !nameOnCard) {
-        throw new Error('Please fill out all payment fields')
-      }
-      
-      // This is where you would integrate with a payment processor like Stripe
-      // For demo purposes, we'll simulate a successful payment
-      
-      // Simulate processing time
+      // For demo purposes, we'll simulate a payment processing delay
       await new Promise(resolve => setTimeout(resolve, 1500))
       
-      // Get the last 4 digits of the card number
-      const lastFour = cardNumber.replace(/\s/g, '').slice(-4)
+      // Extract the last 4 digits from card number
+      const lastFour = cardNumber.replace(/\s+/g, '').slice(-4)
       
-      // Parse the plan price to a number
-      const price = parseFloat(selectedPlan.price.replace('$', ''))
-      
-      // Create the subscription in the database with the selected duration
+      // Create the subscription in the database
       const subscription = await createSubscription(
         user.id,
         selectedPlan.id,
         selectedPlan.game,
-        price,
+        parseFloat(selectedPlan.price.replace('$', '')),
         lastFour,
         selectedPlan.duration
       )
       
       if (!subscription) {
-        throw new Error('Failed to create subscription record')
+        throw new Error('Failed to create subscription')
       }
       
       // Also update user metadata for compatibility with existing code
@@ -361,7 +352,7 @@ export default function SubscriptionsPage() {
       // Update local state
       setCurrentPlan(selectedPlan.id)
       setCurrentDuration(selectedPlan.duration)
-      setSelectedGame(selectedPlan.game)
+      setCurrentGame(selectedPlan.game)
       setMessage({ type: 'success', text: `Successfully subscribed to ${selectedPlan.name} plan for ${selectedPlan.game}!` })
       
       // Close modal
@@ -461,7 +452,7 @@ export default function SubscriptionsPage() {
                 </span> plan
               </p>
               <p className="text-sm mt-1">
-                Game: <span className="font-medium">{selectedGame || user?.user_metadata?.subscription_game || 'Unknown'}</span>
+                Game: <span className="font-medium">{currentGame || user?.user_metadata?.subscription_game || 'Unknown'}</span>
               </p>
               <p className="text-sm">
                 Duration: <span className="font-medium">{getDurationText(currentDuration || 'month')}</span>
@@ -561,19 +552,19 @@ export default function SubscriptionsPage() {
             <button
               key={game}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                !selectedGame || selectedGame === game
+                !displayedGame || displayedGame === game
                   ? 'bg-primary text-white'
                   : 'bg-card-hover text-text-secondary hover:bg-card-background'
               }`}
-              onClick={() => setSelectedGame(game)}
+              onClick={() => setDisplayedGame(game)}
             >
               {game}
             </button>
           ))}
-          {selectedGame && (
+          {displayedGame && (
             <button
               className="px-4 py-2 rounded-full text-sm font-medium transition-colors bg-card-hover text-text-secondary hover:bg-card-background"
-              onClick={() => setSelectedGame(null)}
+              onClick={() => setDisplayedGame(null)}
             >
               View All
             </button>
@@ -582,14 +573,14 @@ export default function SubscriptionsPage() {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans
-            .filter(plan => !selectedGame || plan.game === selectedGame)
+            .filter(plan => !displayedGame || plan.game === displayedGame)
             .map((plan) => (
               <motion.div
                 key={`${plan.id}-${plan.game}-${plan.duration}`}
                 className={`card-effect p-6 border-card relative ${
                   plan.popular ? `border-${plan.color}-600/50` : ''
                 } ${
-                  currentPlan === plan.id && currentDuration === plan.duration ? `bg-${plan.color}-600/10 border-${plan.color}-600/50` : ''
+                  currentPlan === plan.id && currentDuration === plan.duration && currentGame === plan.game ? `bg-${plan.color}-600/10 border-${plan.color}-600/50` : ''
                 }`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
