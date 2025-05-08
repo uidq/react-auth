@@ -49,7 +49,6 @@ export default function PublicProfilePage() {
   const [bio, setBio] = useState('')
   const [website, setWebsite] = useState('')
   const [location, setLocation] = useState('')
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [profileUrl, setProfileUrl] = useState('')
 
   useEffect(() => {
@@ -75,7 +74,6 @@ export default function PublicProfilePage() {
             bio, 
             website, 
             location, 
-            avatar_url,
             public_profile = true
           } = session.user.user_metadata
           
@@ -83,7 +81,6 @@ export default function PublicProfilePage() {
           if (bio) setBio(bio)
           if (website) setWebsite(website)
           if (location) setLocation(location)
-          if (avatar_url) setAvatarUrl(avatar_url)
           setPublicProfile(public_profile)
         }
         
@@ -138,7 +135,17 @@ export default function PublicProfilePage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-bold">Public Profile</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Public Profile</h1>
+        <Button
+          color="primary"
+          as="a"
+          href="/dashboard/profile"
+          className="btn-hover"
+        >
+          Edit Profile
+        </Button>
+      </div>
       
       {message.text && (
         <motion.div 
@@ -213,17 +220,9 @@ export default function PublicProfilePage() {
           <div className="p-6 space-y-6">
             <div className="flex items-start gap-4">
               <div className="w-20 h-20 rounded-full overflow-hidden shrink-0">
-                {avatarUrl ? (
-                  <img 
-                    src={avatarUrl} 
-                    alt="Avatar" 
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-primary/20 flex items-center justify-center text-primary text-2xl">
-                    {username ? username[0].toUpperCase() : user?.email[0].toUpperCase()}
-                  </div>
-                )}
+                <div className="w-full h-full bg-primary/20 flex items-center justify-center text-primary text-2xl">
+                  {username ? username[0].toUpperCase() : user?.email[0].toUpperCase()}
+                </div>
               </div>
               
               <div>

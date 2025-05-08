@@ -37,14 +37,14 @@ export default function Home() {
                 Get Started
               </Link>
               <Link
-                href="/auth/login"
+                href="/pricing"
                 className={buttonStyles({
                   variant: "bordered",
                   radius: "full",
                   className: "px-8 py-2 text-base border-subtle-border hover:bg-card-hover"
                 })}
               >
-                Sign In
+                View Pricing
               </Link>
             </div>
           </motion.div>
@@ -192,7 +192,7 @@ export default function Home() {
           >
             <h2 className="text-3xl font-bold mb-4">Ready to get started?</h2>
             <p className="text-text-secondary max-w-2xl mx-auto mb-8">
-              Start building your application with our secure authentication system today.
+              Start building your application with our secure authentication system and flexible subscription plans today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -207,14 +207,14 @@ export default function Home() {
                 Create Account
               </Link>
               <Link
-                href="/docs"
+                href="/pricing"
                 className={buttonStyles({
                   variant: "bordered",
                   radius: "full",
                   className: "px-8 py-2 text-base border-subtle-border hover:bg-card-hover"
                 })}
               >
-                View Documentation
+                View Pricing
               </Link>
             </div>
           </motion.div>

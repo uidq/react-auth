@@ -13,12 +13,12 @@ export const siteConfig = {
       href: "/features",
     },
     {
-      label: "Pricing",
-      href: "/pricing",
-    },
-    {
       label: "Documentation",
       href: "/docs",
+    },
+    {
+      label: "Dashboard",
+      href: "/dashboard",
     },
   ],
   navMenuItems: [
@@ -31,10 +31,6 @@ export const siteConfig = {
       href: "/features",
     },
     {
-      label: "Pricing",
-      href: "/pricing",
-    },
-    {
       label: "Documentation",
       href: "/docs",
     },
@@ -44,7 +40,7 @@ export const siteConfig = {
     },
   ],
   links: {
-    github: "https://github.com/user/react-auth",
+    github: "https://github.com/uidq/react-auth",
     discord: "https://discord.gg/",
     docs: "/docs",
   },

@@ -11,6 +11,14 @@ export async function GET(req: NextRequest) {
 
   if (code) {
     await supabase.auth.exchangeCodeForSession(code);
+    
+    // Check if user has a pending subscription
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (user?.user_metadata?.subscription_status === 'pending' && user?.user_metadata?.subscription_plan) {
+      // Redirect to subscriptions page to complete payment
+      return NextResponse.redirect(new URL('/dashboard/subscriptions', req.url));
+    }
   }
 
   return NextResponse.redirect(new URL('/dashboard', req.url));
